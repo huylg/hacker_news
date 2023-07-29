@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+import 'package:hacker_news/models/story.dart';
+
+class StoryItem extends StatelessWidget {
+  const StoryItem(
+    this.story, {
+    super.key,
+  });
+
+  final Story story;
+
+  @override
+  Widget build(BuildContext context) => ListTile(
+        title: Text(story.title),
+        subtitle: Text(story.by),
+        trailing: IconButton(
+            onPressed: () {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return ListView(
+                      children: const [
+                        const ListTile(title: Text('Share')),
+                        const ListTile(title: Text('Open HN Link')),
+                      ],
+                    );
+                  });
+            },
+            icon: const Icon(Icons.more_horiz)),
+      );
+}
