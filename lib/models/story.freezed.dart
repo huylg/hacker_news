@@ -24,11 +24,12 @@ mixin _$Story {
   int? get descendants => throw _privateConstructorUsedError;
   int get id => throw _privateConstructorUsedError;
   List<int>? get kids => throw _privateConstructorUsedError;
-  int get score =>
-      throw _privateConstructorUsedError; // required DateTime time,
+  int get score => throw _privateConstructorUsedError;
+  int? get time => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String? get url => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
+  bool get isFavorite => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,9 +47,11 @@ abstract class $StoryCopyWith<$Res> {
       int id,
       List<int>? kids,
       int score,
+      int? time,
       String title,
       String? url,
-      String type});
+      String type,
+      bool isFavorite});
 }
 
 /// @nodoc
@@ -69,9 +72,11 @@ class _$StoryCopyWithImpl<$Res, $Val extends Story>
     Object? id = null,
     Object? kids = freezed,
     Object? score = null,
+    Object? time = freezed,
     Object? title = null,
     Object? url = freezed,
     Object? type = null,
+    Object? isFavorite = null,
   }) {
     return _then(_value.copyWith(
       by: null == by
@@ -94,6 +99,10 @@ class _$StoryCopyWithImpl<$Res, $Val extends Story>
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
               as int,
+      time: freezed == time
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as int?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -106,6 +115,10 @@ class _$StoryCopyWithImpl<$Res, $Val extends Story>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      isFavorite: null == isFavorite
+          ? _value.isFavorite
+          : isFavorite // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -122,9 +135,11 @@ abstract class _$$_StoryCopyWith<$Res> implements $StoryCopyWith<$Res> {
       int id,
       List<int>? kids,
       int score,
+      int? time,
       String title,
       String? url,
-      String type});
+      String type,
+      bool isFavorite});
 }
 
 /// @nodoc
@@ -141,9 +156,11 @@ class __$$_StoryCopyWithImpl<$Res> extends _$StoryCopyWithImpl<$Res, _$_Story>
     Object? id = null,
     Object? kids = freezed,
     Object? score = null,
+    Object? time = freezed,
     Object? title = null,
     Object? url = freezed,
     Object? type = null,
+    Object? isFavorite = null,
   }) {
     return _then(_$_Story(
       by: null == by
@@ -166,6 +183,10 @@ class __$$_StoryCopyWithImpl<$Res> extends _$StoryCopyWithImpl<$Res, _$_Story>
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
               as int,
+      time: freezed == time
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as int?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -178,6 +199,10 @@ class __$$_StoryCopyWithImpl<$Res> extends _$StoryCopyWithImpl<$Res, _$_Story>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      isFavorite: null == isFavorite
+          ? _value.isFavorite
+          : isFavorite // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -191,9 +216,11 @@ class _$_Story implements _Story {
       required this.id,
       final List<int>? kids,
       required this.score,
+      this.time,
       required this.title,
       this.url,
-      required this.type})
+      required this.type,
+      this.isFavorite = false})
       : _kids = kids;
 
   factory _$_Story.fromJson(Map<String, dynamic> json) =>
@@ -217,17 +244,21 @@ class _$_Story implements _Story {
 
   @override
   final int score;
-// required DateTime time,
+  @override
+  final int? time;
   @override
   final String title;
   @override
   final String? url;
   @override
   final String type;
+  @override
+  @JsonKey()
+  final bool isFavorite;
 
   @override
   String toString() {
-    return 'Story(by: $by, descendants: $descendants, id: $id, kids: $kids, score: $score, title: $title, url: $url, type: $type)';
+    return 'Story(by: $by, descendants: $descendants, id: $id, kids: $kids, score: $score, time: $time, title: $title, url: $url, type: $type, isFavorite: $isFavorite)';
   }
 
   @override
@@ -241,15 +272,28 @@ class _$_Story implements _Story {
             (identical(other.id, id) || other.id == id) &&
             const DeepCollectionEquality().equals(other._kids, _kids) &&
             (identical(other.score, score) || other.score == score) &&
+            (identical(other.time, time) || other.time == time) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.url, url) || other.url == url) &&
-            (identical(other.type, type) || other.type == type));
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.isFavorite, isFavorite) ||
+                other.isFavorite == isFavorite));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, by, descendants, id,
-      const DeepCollectionEquality().hash(_kids), score, title, url, type);
+  int get hashCode => Object.hash(
+      runtimeType,
+      by,
+      descendants,
+      id,
+      const DeepCollectionEquality().hash(_kids),
+      score,
+      time,
+      title,
+      url,
+      type,
+      isFavorite);
 
   @JsonKey(ignore: true)
   @override
@@ -272,9 +316,11 @@ abstract class _Story implements Story {
       required final int id,
       final List<int>? kids,
       required final int score,
+      final int? time,
       required final String title,
       final String? url,
-      required final String type}) = _$_Story;
+      required final String type,
+      final bool isFavorite}) = _$_Story;
 
   factory _Story.fromJson(Map<String, dynamic> json) = _$_Story.fromJson;
 
@@ -288,12 +334,16 @@ abstract class _Story implements Story {
   List<int>? get kids;
   @override
   int get score;
-  @override // required DateTime time,
+  @override
+  int? get time;
+  @override
   String get title;
   @override
   String? get url;
   @override
   String get type;
+  @override
+  bool get isFavorite;
   @override
   @JsonKey(ignore: true)
   _$$_StoryCopyWith<_$_Story> get copyWith =>

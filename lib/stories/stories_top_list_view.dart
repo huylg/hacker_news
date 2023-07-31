@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hacker_news/models/stories_pagination.dart';
 import 'package:hacker_news/repositories/stories_top_repository.dart';
 import 'package:hacker_news/stories/story_item.dart';
+import 'package:provider/provider.dart';
 
 class StoriesTopListView extends StatefulWidget {
   const StoriesTopListView(this.data, {super.key});
@@ -27,6 +28,8 @@ class _StoriesTopListViewState extends State<StoriesTopListView> {
   @override
   Widget build(BuildContext context) {
     final stories = _data.stories;
+    final storiesTopRepository = Provider.of<StoriesTopRepository>(context);
+
     return RefreshIndicator(
       onRefresh: () => storiesTopRepository
           .refetchTopStories()
@@ -44,7 +47,10 @@ class _StoriesTopListViewState extends State<StoriesTopListView> {
               return const Center(child: CircularProgressIndicator.adaptive());
             }
 
-            return StoryItem(stories[index]);
+            return StoryItem(
+              story: stories[index],
+              onChange: (story) => setState(() => _data.stories[index] = story),
+            );
           },
         ),
       ),

@@ -31,5 +31,3 @@ class BookmarksRepository {
                   .toList() ??
               <String>[]));
 }
-
-final bookmarksRepository = BookmarksRepository();

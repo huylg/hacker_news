@@ -11,10 +11,11 @@ class Story with _$Story {
     required int id,
     List<int>? kids,
     required int score,
-    // required DateTime time,
+    int? time,
     required String title,
     String? url,
     required String type,
+    @Default(false) bool isFavorite,
   }) = _Story;
 
   factory Story.fromJson(Map<String, dynamic> json) => _$StoryFromJson(json);

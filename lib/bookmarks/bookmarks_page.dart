@@ -6,13 +6,11 @@ class BookmarksPage extends StatelessWidget {
   const BookmarksPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: const MyBottomNavigationbar(),
-      appBar: AppBar(
-        title: const Text('Bookmarks'),
-      ),
-      body: const BookmarksView(),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        bottomNavigationBar: const MyBottomNavigationbar(),
+        appBar: AppBar(
+          title: const Text('Bookmarks'),
+        ),
+        body: const BookmarksView(),
+      );
 }

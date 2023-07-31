@@ -2,10 +2,14 @@ import 'dart:convert';
 
 import 'package:async/async.dart';
 import 'package:hacker_news/models/stories_pagination.dart';
+import 'package:hacker_news/repositories/bookmarks_repository.dart';
 import 'package:hacker_news/repositories/story_fetch.dart';
 import 'package:http/http.dart' as http;
 
 class StoriesTopRepository {
+  StoriesTopRepository(this.bookmarksRepository);
+
+  final BookmarksRepository bookmarksRepository;
   var _cached = AsyncMemoizer<List<int>>();
 
   Future<List<int>> _fetchStoriesId() => _cached.runOnce(() => http
@@ -38,8 +42,18 @@ class StoriesTopRepository {
   }
 
   Future<StoriesPagination> fetchTopStories() async {
-    final storiesId = await _fetchStoriesId();
-    final stories = await Future.wait(storiesId.take(30).map(storyFetch));
+    final (storiesId, bookmarks) = await (
+      _fetchStoriesId(),
+      bookmarksRepository
+          .bookmarksFetch()
+          .then((value) => value.map((e) => e.id))
+          .then((value) => value.toSet())
+    ).wait;
+
+    final stories = await Future.wait(storiesId.take(30).map(storyFetch))
+        .then((value) =>
+            value.map((e) => e.copyWith(isFavorite: bookmarks.contains(e.id))))
+        .then((value) => value.toList());
 
     return (
       stories: stories,
@@ -48,5 +62,3 @@ class StoriesTopRepository {
     );
   }
 }
-
-final storiesTopRepository = StoriesTopRepository();

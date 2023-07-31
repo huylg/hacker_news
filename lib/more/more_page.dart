@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hacker_news/brightness_change_notifier.dart';
 import 'package:hacker_news/main.dart';
 import 'package:hacker_news/my_bottom_navigation_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class MorePage extends StatelessWidget {
@@ -16,7 +18,9 @@ class MorePage extends StatelessWidget {
       body: ListView(children: [
         SwitchListTile(
           value: Theme.of(context).brightness == Brightness.dark,
-          onChanged: (value) {},
+          onChanged: (value) => context
+              .read<BrightnessChangeNotifier>()
+              .brightness = value ? Brightness.dark : Brightness.light,
           title: const Text('Dark mode'),
         ),
         const Divider(),
@@ -27,11 +31,13 @@ class MorePage extends StatelessWidget {
         ListTile(
           title: const Text('Star on Github'),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () => launchUrlString(''),
+          onTap: () => launchUrlString('https://github.com/huylg/hacker_news'),
         ),
-        const ListTile(
-          title: Text('Report a bug'),
-          trailing: Icon(Icons.chevron_right),
+        ListTile(
+          title: const Text('Report a bug'),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => launchUrlString(
+              'https://github.com/huylg/hacker_news/issues/new'),
         ),
         const Divider(),
         ListTile(
