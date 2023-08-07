@@ -3,11 +3,18 @@ import 'package:hacker_news/repositories/new_story_repository.dart';
 import 'package:hacker_news/stories/stories_list_view.dart';
 import 'package:provider/provider.dart';
 
-class StoriesNewView extends StatelessWidget {
+class StoriesNewView extends StatefulWidget {
   const StoriesNewView({super.key});
 
   @override
+  State<StoriesNewView> createState() => _StoriesNewViewState();
+}
+
+class _StoriesNewViewState extends State<StoriesNewView>
+    with AutomaticKeepAliveClientMixin<StoriesNewView> {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final repository = context.read<NewStoryRepository>();
 
     return FutureBuilder(
@@ -25,4 +32,7 @@ class StoriesNewView extends StatelessWidget {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -13,17 +13,17 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +31 lib/main.dart
-badd +39 lib/router.dart
-badd +38 lib/router.g.dart
+badd +44 lib/main.dart
+badd +10 lib/router.dart
+badd +32 lib/router.g.dart
 badd +49 lib/repositories/stories_top_list_view.dart
 badd +1 __FLUTTER_DEV_LOG__
-badd +1 lib/my_bottom_navigation_bar.dart
+badd +18 lib/my_bottom_navigation_bar.dart
 badd +1 lib/settings/setting_page.dart
 badd +9 lib/setting/setting_page.dart
 badd +1 lib/stories/story_view.dart
-badd +11 lib/stories/stories_top_view.dart
-badd +33 lib/stories/stories_page.dart
+badd +7 lib/stories/stories_top_view.dart
+badd +36 lib/stories/stories_page.dart
 badd +1 lib/setting
 badd +11 lib/bookmarks/bookmarks_page.dart
 badd +1 lib/bookmarks
@@ -64,24 +64,27 @@ badd +1 lib/repositories
 badd +11 lib/repositories/show_story_repository.dart
 badd +39 lib/repositories/story_repostitory.dart
 badd +1 lib/repositories/new_story_repository.dart
-badd +19 lib/stories/stories_new_view.dart
+badd +37 lib/stories/stories_new_view.dart
 badd +1 lib/stories
-badd +14 lib/stories/stories_ask_view.dart
+badd +35 lib/stories/stories_ask_view.dart
 badd +43 lib/stories/stories_list_view.dart
-badd +22 lib/stories/stories_show_view.dart
+badd +35 lib/stories/stories_show_view.dart
 badd +1 lib/repositories/top_story_repository.dart
-badd +7 https://hacker-news.firebaseio.com/v0/showstories.json
+badd +1 https://hacker-news.firebaseio.com/v0/showstories.json
 badd +4 lib/repositories/ask_story_repository.dart
-badd +16 lib/stories/stories_jobs_view.dart
+badd +36 lib/stories/stories_jobs_view.dart
 badd +1 lib
 badd +9 lib/repositories/job_story_repository.dart
 badd +1 https://hacker-news.firebaseio.com/v0/jobstories.json
+badd +6 android/build.gradle
+badd +1 android
+badd +61 android/app/build.gradle
 argglobal
 %argdel
-$argadd ~/personal/hacker_news
-edit https://hacker-news.firebaseio.com/v0/showstories.json
+$argadd ~/personal/hacker_news/
+edit lib/my_bottom_navigation_bar.dart
 argglobal
-balt lib/main.dart
+balt lib/stories/stories_ask_view.dart
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -92,12 +95,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 7 - ((6 * winheight(0) + 34) / 69)
+let s:l = 13 - ((12 * winheight(0) + 34) / 69)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 7
-normal! 0
+keepjumps 13
+normal! 028|
 lcd ~/personal/hacker_news
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
