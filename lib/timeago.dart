@@ -9,7 +9,7 @@ String timeago(DateTime time) {
     return '${inSeconds}s ago';
   } else if (inMinutes < 60) {
     return '${inMinutes}m ago';
-  } else if (inHours < 60) {
+  } else if (inHours < 24) {
     return '${inHours}h ago';
   } else {
     return '${inDays}d ago';

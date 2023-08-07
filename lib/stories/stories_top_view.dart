@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hacker_news/repositories/stories_top_repository.dart';
-import 'package:hacker_news/stories/stories_top_list_view.dart';
+import 'package:hacker_news/repositories/top_story_repository.dart';
+import 'package:hacker_news/stories/stories_list_view.dart';
 import 'package:provider/provider.dart';
 
 class StoriesTopView extends StatelessWidget {
@@ -8,12 +8,15 @@ class StoriesTopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final storiesTopRepository = Provider.of<StoriesTopRepository>(context);
+    final repository = context.read<TopStoryRepository>();
     return FutureBuilder(
-      future: storiesTopRepository.fetchTopStories(),
+      future: repository.fetchStories(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return StoriesTopListView(snapshot.requireData);
+          return StoriesListView(
+            data: snapshot.requireData,
+            repository: repository,
+          );
         } else if (snapshot.hasError) {
           return Center(child: Text('Error ${snapshot.error}'));
         }

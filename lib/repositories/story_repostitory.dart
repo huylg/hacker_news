@@ -2,18 +2,23 @@ import 'dart:convert';
 
 import 'package:async/async.dart';
 import 'package:hacker_news/models/stories_pagination.dart';
+import 'package:hacker_news/models/story.dart';
 import 'package:hacker_news/repositories/bookmarks_repository.dart';
-import 'package:hacker_news/repositories/story_fetch.dart';
 import 'package:http/http.dart' as http;
 
-class StoriesTopRepository {
-  StoriesTopRepository(this.bookmarksRepository);
+abstract class StoryRepository {
+  StoryRepository({
+    required this.uri,
+    required this.bookmarksRepository,
+  });
 
   final BookmarksRepository bookmarksRepository;
-  var _cached = AsyncMemoizer<List<int>>();
+  var _topStoriesCached = AsyncMemoizer<List<int>>();
 
-  Future<List<int>> _fetchStoriesId() => _cached.runOnce(() => http
-      .get(Uri.parse('https://hacker-news.firebaseio.com/v0/topstories.json'))
+  final Uri uri;
+
+  Future<List<int>> _fetchStoriesId() => _topStoriesCached.runOnce(() => http
+      .get(uri)
       .then((value) {
         if (value.statusCode == 200) {
           return value.body;
@@ -22,6 +27,18 @@ class StoriesTopRepository {
       })
       .then(jsonDecode)
       .then((value) => List<int>.from(value)));
+
+  Future<Story> storyFetch(int id) => http
+      .get(Uri.parse('https://hacker-news.firebaseio.com/v0/item/$id.json'))
+      .then((value) {
+        if (value.statusCode == 200) {
+          return value.body;
+        }
+        throw Exception('Failed to load story');
+      })
+      .then(jsonDecode)
+      .then((value) => value as Map<String, dynamic>)
+      .then(Story.fromJson);
 
   Future<StoriesPagination> fetchMoreTopStories(
       StoriesPagination current) async {
@@ -36,12 +53,12 @@ class StoriesTopRepository {
     );
   }
 
-  Future<StoriesPagination> refetchTopStories() async {
-    _cached = AsyncMemoizer<List<int>>();
-    return fetchTopStories();
+  Future<StoriesPagination> refetchStories() async {
+    _topStoriesCached = AsyncMemoizer<List<int>>();
+    return fetchStories();
   }
 
-  Future<StoriesPagination> fetchTopStories() async {
+  Future<StoriesPagination> fetchStories() async {
     final (storiesId, bookmarks) = await (
       _fetchStoriesId(),
       bookmarksRepository

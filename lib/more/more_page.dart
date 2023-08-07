@@ -70,13 +70,9 @@ class MorePage extends StatelessWidget {
                     ),
                   )),
         ),
-        ListTile(
-          title: const Text('Version'),
-          trailing: FutureBuilder(
-              initialData: '1.0.0+1',
-              future: packageInfoCahed.future
-                  .then((value) => '${value.version}+${value.buildNumber}'),
-              builder: (context, snapshot) => Text(snapshot.requireData)),
+        const ListTile(
+          title: Text('Version'),
+          trailing: Text('1.0.0+1'),
         ),
       ]),
     );

@@ -23,7 +23,7 @@ mixin _$Story {
   String get by => throw _privateConstructorUsedError;
   int? get descendants => throw _privateConstructorUsedError;
   int get id => throw _privateConstructorUsedError;
-  List<int>? get kids => throw _privateConstructorUsedError;
+  List<int> get kids => throw _privateConstructorUsedError;
   int get score => throw _privateConstructorUsedError;
   int? get time => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
@@ -45,7 +45,7 @@ abstract class $StoryCopyWith<$Res> {
       {String by,
       int? descendants,
       int id,
-      List<int>? kids,
+      List<int> kids,
       int score,
       int? time,
       String title,
@@ -70,7 +70,7 @@ class _$StoryCopyWithImpl<$Res, $Val extends Story>
     Object? by = null,
     Object? descendants = freezed,
     Object? id = null,
-    Object? kids = freezed,
+    Object? kids = null,
     Object? score = null,
     Object? time = freezed,
     Object? title = null,
@@ -91,10 +91,10 @@ class _$StoryCopyWithImpl<$Res, $Val extends Story>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      kids: freezed == kids
+      kids: null == kids
           ? _value.kids
           : kids // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
+              as List<int>,
       score: null == score
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
@@ -133,7 +133,7 @@ abstract class _$$_StoryCopyWith<$Res> implements $StoryCopyWith<$Res> {
       {String by,
       int? descendants,
       int id,
-      List<int>? kids,
+      List<int> kids,
       int score,
       int? time,
       String title,
@@ -154,7 +154,7 @@ class __$$_StoryCopyWithImpl<$Res> extends _$StoryCopyWithImpl<$Res, _$_Story>
     Object? by = null,
     Object? descendants = freezed,
     Object? id = null,
-    Object? kids = freezed,
+    Object? kids = null,
     Object? score = null,
     Object? time = freezed,
     Object? title = null,
@@ -175,10 +175,10 @@ class __$$_StoryCopyWithImpl<$Res> extends _$StoryCopyWithImpl<$Res, _$_Story>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      kids: freezed == kids
+      kids: null == kids
           ? _value._kids
           : kids // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
+              as List<int>,
       score: null == score
           ? _value.score
           : score // ignore: cast_nullable_to_non_nullable
@@ -214,7 +214,7 @@ class _$_Story implements _Story {
       {required this.by,
       this.descendants,
       required this.id,
-      final List<int>? kids,
+      final List<int> kids = const [],
       required this.score,
       this.time,
       required this.title,
@@ -232,14 +232,13 @@ class _$_Story implements _Story {
   final int? descendants;
   @override
   final int id;
-  final List<int>? _kids;
+  final List<int> _kids;
   @override
-  List<int>? get kids {
-    final value = _kids;
-    if (value == null) return null;
+  @JsonKey()
+  List<int> get kids {
     if (_kids is EqualUnmodifiableListView) return _kids;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_kids);
   }
 
   @override
@@ -314,7 +313,7 @@ abstract class _Story implements Story {
       {required final String by,
       final int? descendants,
       required final int id,
-      final List<int>? kids,
+      final List<int> kids,
       required final int score,
       final int? time,
       required final String title,
@@ -331,7 +330,7 @@ abstract class _Story implements Story {
   @override
   int get id;
   @override
-  List<int>? get kids;
+  List<int> get kids;
   @override
   int get score;
   @override

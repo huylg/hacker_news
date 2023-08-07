@@ -13,36 +13,32 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +1 ~/personal/hacker_news
-badd +27 lib/main.dart
+badd +31 lib/main.dart
 badd +39 lib/router.dart
 badd +38 lib/router.g.dart
 badd +49 lib/repositories/stories_top_list_view.dart
-badd +26 __FLUTTER_DEV_LOG__
+badd +1 __FLUTTER_DEV_LOG__
 badd +1 lib/my_bottom_navigation_bar.dart
 badd +1 lib/settings/setting_page.dart
 badd +9 lib/setting/setting_page.dart
-badd +15 lib/repositories/story_fetch.dart
 badd +1 lib/stories/story_view.dart
-badd +16 lib/stories/stories_top_view.dart
-badd +28 lib/stories/stories_page.dart
+badd +11 lib/stories/stories_top_view.dart
+badd +33 lib/stories/stories_page.dart
 badd +1 lib/setting
 badd +11 lib/bookmarks/bookmarks_page.dart
 badd +1 lib/bookmarks
-badd +46 lib/more/more_page.dart
-badd +13 lib/repositories/bookmarks_repository.dart
+badd +73 lib/more/more_page.dart
+badd +33 lib/repositories/bookmarks_repository.dart
 badd +472 ~/.pub-cache/hosted/pub.dev/go_router-10.0.0/lib/src/router.dart
-badd +32 lib/stories/story_item.dart
-badd +50 lib/stories/stories_top_list_view.dart
+badd +24 lib/stories/story_item.dart
 badd +14 lib/bookmarks/bookmarks_view.dart
-badd +26 pubspec.yaml
+badd +17 pubspec.yaml
 badd +2357 ~/fvm/versions/stable/packages/flutter/lib/src/widgets/basic.dart
 badd +32 ~/.pub-cache/hosted/pub.dev/url_launcher-6.1.12/lib/src/types.dart
 badd +318 ~/fvm/versions/stable/packages/flutter/lib/src/material/icon_button.dart
 badd +1205 ~/fvm/versions/stable/packages/flutter/lib/src/widgets/scroll_view.dart
 badd +237 ~/fvm/versions/stable/packages/flutter/lib/src/widgets/scroll_delegate.dart
-badd +21 lib/models/story.dart
-badd +7 lib/repositories/stories_top_repository.dart
+badd +12 lib/models/story.dart
 badd +1 lib/more
 badd +9 lib/brightness_change_notifier.dart
 badd +107 ~/.pub-cache/hosted/pub.dev/provider-6.0.5/lib/src/change_notifier_provider.dart
@@ -51,22 +47,41 @@ badd +174 ~/fvm/versions/stable/packages/flutter/lib/src/material/list_tile_them
 badd +1 linux/main.cc
 badd +1 ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png
 badd +33 lib/bookmarks/bookmark_list_view.dart
-badd +47 lib/story/story_page.dart
+badd +33 lib/story/story_page.dart
+badd +12 lib/timeago.dart
+badd +1 lib/story
+badd +1 lib/models
+badd +16 lib/models/comment.dart
+badd +7 lib/comments/comments_repository.dart
+badd +17 lib/comments/comment_item.dart
+badd +16 lib/repositories/comments_repository.dart
+badd +12 lib/models/comment.g.dart
+badd +1 lib/comments
+badd +18 lib/comments/comments_list_view.dart
+badd +73 ~/.pub-cache/hosted/pub.dev/flutter_html-3.0.0-beta.2/lib/flutter_html.dart
+badd +232 ~/fvm/versions/stable/packages/flutter/lib/src/widgets/async.dart
+badd +1 lib/repositories
+badd +11 lib/repositories/show_story_repository.dart
+badd +39 lib/repositories/story_repostitory.dart
+badd +1 lib/repositories/new_story_repository.dart
+badd +19 lib/stories/stories_new_view.dart
 badd +1 lib/stories
-badd +17 lib/timeago.dart
+badd +14 lib/stories/stories_ask_view.dart
+badd +43 lib/stories/stories_list_view.dart
+badd +22 lib/stories/stories_show_view.dart
+badd +1 lib/repositories/top_story_repository.dart
+badd +7 https://hacker-news.firebaseio.com/v0/showstories.json
+badd +4 lib/repositories/ask_story_repository.dart
+badd +16 lib/stories/stories_jobs_view.dart
+badd +1 lib
+badd +9 lib/repositories/job_story_repository.dart
+badd +1 https://hacker-news.firebaseio.com/v0/jobstories.json
 argglobal
 %argdel
 $argadd ~/personal/hacker_news
-edit lib/more/more_page.dart
-wincmd t
-let s:save_winminheight = &winminheight
-let s:save_winminwidth = &winminwidth
-set winminheight=0
-set winheight=1
-set winminwidth=0
-set winwidth=1
+edit https://hacker-news.firebaseio.com/v0/showstories.json
 argglobal
-balt __FLUTTER_DEV_LOG__
+balt lib/main.dart
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -77,12 +92,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 64 - ((21 * winheight(0) + 18) / 37)
+let s:l = 7 - ((6 * winheight(0) + 34) / 69)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 64
-normal! 010|
+keepjumps 7
+normal! 0
 lcd ~/personal/hacker_news
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
@@ -91,8 +106,6 @@ endif
 unlet! s:wipebuf
 set winheight=1 winwidth=20
 let &shortmess = s:shortmess_save
-let &winminheight = s:save_winminheight
-let &winminwidth = s:save_winminwidth
 let s:sx = expand("<sfile>:p:r")."x.vim"
 if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)

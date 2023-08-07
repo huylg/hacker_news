@@ -9,7 +9,7 @@ class Story with _$Story {
     required String by,
     int? descendants,
     required int id,
-    List<int>? kids,
+    @Default([]) List<int> kids,
     required int score,
     int? time,
     required String title,

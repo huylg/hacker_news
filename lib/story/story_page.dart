@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hacker_news/comments/comments_list_view.dart';
 import 'package:hacker_news/models/story.dart';
 import 'package:hacker_news/repositories/bookmarks_repository.dart';
+import 'package:hacker_news/repositories/comments_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -75,6 +77,22 @@ class _StoryPageState extends State<StoryPage> {
               icon: const Icon(Icons.more_horiz)),
         ],
       ),
+      body: FutureBuilder(
+          future: context.read<CommentsRepository>().commentsFetch(_story.kids),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('error: ${snapshot.error}'),
+              );
+            } else if (snapshot.hasData) {
+              return CommentsListView(
+                  comments: snapshot.requireData, story: _story);
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
     );
   }
 }

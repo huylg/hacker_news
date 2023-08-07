@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hacker_news/repositories/show_story_repository.dart';
+import 'package:hacker_news/repositories/ask_story_repository.dart';
 import 'package:hacker_news/stories/stories_list_view.dart';
 import 'package:provider/provider.dart';
 
-class StoriesShowView extends StatelessWidget {
-  const StoriesShowView({super.key});
+class StoresAskView extends StatelessWidget {
+  const StoresAskView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final repository = context.read<ShowStoryRepository>();
+    final repository = context.read<AskStoryRepository>();
     return FutureBuilder(
       future: repository.fetchStories(),
       builder: (context, snapshot) {

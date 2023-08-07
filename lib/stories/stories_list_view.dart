@@ -2,20 +2,24 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hacker_news/models/stories_pagination.dart';
-import 'package:hacker_news/repositories/stories_top_repository.dart';
+import 'package:hacker_news/repositories/story_repostitory.dart';
 import 'package:hacker_news/stories/story_item.dart';
-import 'package:provider/provider.dart';
 
-class StoriesTopListView extends StatefulWidget {
-  const StoriesTopListView(this.data, {super.key});
+class StoriesListView extends StatefulWidget {
+  const StoriesListView({
+    super.key,
+    required this.data,
+    required this.repository,
+  });
 
   final StoriesPagination data;
+  final StoryRepository repository;
 
   @override
-  State<StoriesTopListView> createState() => _StoriesTopListViewState();
+  State<StoriesListView> createState() => _StoriesListViewState();
 }
 
-class _StoriesTopListViewState extends State<StoriesTopListView> {
+class _StoriesListViewState extends State<StoriesListView> {
   Future<void>? _loadmore;
   late StoriesPagination _data;
 
@@ -28,11 +32,10 @@ class _StoriesTopListViewState extends State<StoriesTopListView> {
   @override
   Widget build(BuildContext context) {
     final stories = _data.stories;
-    final storiesTopRepository = Provider.of<StoriesTopRepository>(context);
 
     return RefreshIndicator(
-      onRefresh: () => storiesTopRepository
-          .refetchTopStories()
+      onRefresh: () => widget.repository
+          .refetchStories()
           .then((value) => setState(() => _data = value)),
       child: Scrollbar(
         child: ListView.separated(
@@ -40,11 +43,18 @@ class _StoriesTopListViewState extends State<StoriesTopListView> {
           separatorBuilder: (context, index) => const Divider(),
           itemBuilder: (context, index) {
             if (index == stories.length) {
-              _loadmore ??= storiesTopRepository
+              _loadmore ??= widget.repository
                   .fetchMoreTopStories(_data)
                   .then((value) => setState(() => _data = value))
                   .whenComplete(() => _loadmore = null);
-              return const Center(child: CircularProgressIndicator.adaptive());
+              return const Center(
+                child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1,
+                    )),
+              );
             }
 
             return StoryItem(

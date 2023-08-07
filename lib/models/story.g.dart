@@ -10,7 +10,8 @@ _$_Story _$$_StoryFromJson(Map<String, dynamic> json) => _$_Story(
       by: json['by'] as String,
       descendants: json['descendants'] as int?,
       id: json['id'] as int,
-      kids: (json['kids'] as List<dynamic>?)?.map((e) => e as int).toList(),
+      kids: (json['kids'] as List<dynamic>?)?.map((e) => e as int).toList() ??
+          const [],
       score: json['score'] as int,
       time: json['time'] as int?,
       title: json['title'] as String,
