@@ -13,12 +13,12 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +44 lib/main.dart
+badd +20 lib/main.dart
 badd +10 lib/router.dart
 badd +32 lib/router.g.dart
 badd +49 lib/repositories/stories_top_list_view.dart
-badd +1 __FLUTTER_DEV_LOG__
-badd +18 lib/my_bottom_navigation_bar.dart
+badd +42 __FLUTTER_DEV_LOG__
+badd +37 lib/my_bottom_navigation_bar.dart
 badd +1 lib/settings/setting_page.dart
 badd +9 lib/setting/setting_page.dart
 badd +1 lib/stories/story_view.dart
@@ -32,7 +32,7 @@ badd +33 lib/repositories/bookmarks_repository.dart
 badd +472 ~/.pub-cache/hosted/pub.dev/go_router-10.0.0/lib/src/router.dart
 badd +24 lib/stories/story_item.dart
 badd +14 lib/bookmarks/bookmarks_view.dart
-badd +17 pubspec.yaml
+badd +23 pubspec.yaml
 badd +2357 ~/fvm/versions/stable/packages/flutter/lib/src/widgets/basic.dart
 badd +32 ~/.pub-cache/hosted/pub.dev/url_launcher-6.1.12/lib/src/types.dart
 badd +318 ~/fvm/versions/stable/packages/flutter/lib/src/material/icon_button.dart
@@ -79,12 +79,13 @@ badd +1 https://hacker-news.firebaseio.com/v0/jobstories.json
 badd +6 android/build.gradle
 badd +1 android
 badd +61 android/app/build.gradle
+badd +4 README.md
 argglobal
 %argdel
 $argadd ~/personal/hacker_news/
-edit lib/my_bottom_navigation_bar.dart
+edit README.md
 argglobal
-balt lib/stories/stories_ask_view.dart
+balt __FLUTTER_DEV_LOG__
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -95,12 +96,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 13 - ((12 * winheight(0) + 34) / 69)
+let s:l = 24 - ((23 * winheight(0) + 34) / 69)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 13
-normal! 028|
+keepjumps 24
+normal! 026|
 lcd ~/personal/hacker_news
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
