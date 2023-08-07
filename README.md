@@ -1,8 +1,10 @@
 ### App Screenshots
 
-![Home Screen](flutter_01.png)
-![Bookmarks_Screen](flutter_02.png)
-![Setting_Screen](flutter_03.png)
+<p align="center">
+   <img width="200" alt="01" src="flutter_01.png"> 
+   <img width="200" alt="02" src="flutter_02.png"> 
+   <img width="200" alt="03" src="flutter_03.png"> 
+</p>
 
 ## Description
 
@@ -23,6 +25,7 @@ The Hacker News Flutter Client App is a mobile application built with Flutter, d
 - share_plus: Allows users to share news articles with other apps on their devices.
 - shared_preferences: Provides local storage to save bookmarks.
 - url_launcher: Enables opening URLs in the default browser for reading full articles.
+_ material 3: New designed system.
 
 ## Development
 
