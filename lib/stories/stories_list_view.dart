@@ -4,16 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:hacker_news/models/stories_pagination.dart';
 import 'package:hacker_news/repositories/story_repostitory.dart';
 import 'package:hacker_news/stories/story_item.dart';
+import 'package:provider/provider.dart';
 
 class StoriesListView extends StatefulWidget {
   const StoriesListView({
     super.key,
     required this.data,
-    required this.repository,
   });
 
   final StoriesPagination data;
-  final StoryRepository repository;
 
   @override
   State<StoriesListView> createState() => _StoriesListViewState();
@@ -32,9 +31,10 @@ class _StoriesListViewState extends State<StoriesListView> {
   @override
   Widget build(BuildContext context) {
     final stories = _data.stories;
+    final repository = context.read<StoryRepository>();
 
     return RefreshIndicator(
-      onRefresh: () => widget.repository
+      onRefresh: () => repository
           .refetchStories()
           .then((value) => setState(() => _data = value)),
       child: Scrollbar(
@@ -43,7 +43,7 @@ class _StoriesListViewState extends State<StoriesListView> {
           separatorBuilder: (context, index) => const Divider(),
           itemBuilder: (context, index) {
             if (index == stories.length) {
-              _loadmore ??= widget.repository
+              _loadmore ??= repository
                   .fetchMoreTopStories(_data)
                   .then((value) => setState(() => _data = value))
                   .whenComplete(() => _loadmore = null);

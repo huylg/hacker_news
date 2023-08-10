@@ -29,70 +29,64 @@ class _StoryPageState extends State<StoryPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {
-              final newStory = _story.copyWith(isFavorite: !_story.isFavorite);
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () {
+                final newStory =
+                    _story.copyWith(isFavorite: !_story.isFavorite);
 
-              setState(() {
-                _story = newStory;
-              });
+                setState(() {
+                  _story = newStory;
+                });
 
-              final repository = context.read<BookmarksRepository>();
+                final repository = context.read<BookmarksRepository>();
 
-              return switch (newStory.isFavorite) {
-                true => repository.bookmark(newStory),
-                false => repository.unbookmark(newStory.id),
-              }
-                  .ignore();
-            },
-            icon: Icon(
-                _story.isFavorite ? Icons.bookmark : Icons.bookmark_outline),
-          ),
-          IconButton(
-              onPressed: () => showModalBottomSheet(
-                  context: context,
-                  builder: (context) => SizedBox(
-                        height: 150,
-                        child: Center(
-                          child: Column(
-                            children: [
-                              TextButton(
-                                  child: const Text('Share via'),
-                                  onPressed: () => Share.share(
-                                      'https://news.ycombinator.com/item?id=${widget.story.id}')),
-                              TextButton(
-                                child: const Text('Open HN link'),
-                                onPressed: () => launchUrlString(
-                                  'https://news.ycombinator.com/item?id=${widget.story.id}',
+                return switch (newStory.isFavorite) {
+                  true => repository.bookmark(newStory),
+                  false => repository.unbookmark(newStory.id),
+                }
+                    .ignore();
+              },
+              icon: Icon(
+                  _story.isFavorite ? Icons.bookmark : Icons.bookmark_outline),
+            ),
+            IconButton(
+                onPressed: () => showModalBottomSheet(
+                    context: context,
+                    builder: (context) => SizedBox(
+                          height: 150,
+                          child: Center(
+                            child: Column(
+                              children: [
+                                TextButton(
+                                    child: const Text('Share via'),
+                                    onPressed: () => Share.share(
+                                        'https://news.ycombinator.com/item?id=${widget.story.id}')),
+                                TextButton(
+                                  child: const Text('Open HN link'),
+                                  onPressed: () => launchUrlString(
+                                    'https://news.ycombinator.com/item?id=${widget.story.id}',
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      )),
-              icon: const Icon(Icons.more_horiz)),
-        ],
-      ),
-      body: FutureBuilder(
-          future: context.read<CommentsRepository>().commentsFetch(_story.kids),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text('error: ${snapshot.error}'),
-              );
-            } else if (snapshot.hasData) {
-              return CommentsListView(
-                  comments: snapshot.requireData, story: _story);
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
-    );
-  }
+                        )),
+                icon: const Icon(Icons.more_horiz)),
+          ],
+        ),
+        body: FutureBuilder(
+            future:
+                context.read<CommentsRepository>().commentsFetch(_story.kids),
+            builder: (context, snapshot) =>
+                switch ((snapshot.hasData, snapshot.hasError)) {
+                  (true, false) => CommentsListView(
+                      comments: snapshot.requireData, story: _story),
+                  (false, true) =>
+                    Center(child: Text('Error ${snapshot.error}')),
+                  _ => const Center(child: CircularProgressIndicator()),
+                }),
+      );
 }

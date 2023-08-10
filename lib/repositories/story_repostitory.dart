@@ -13,11 +13,11 @@ abstract class StoryRepository {
   });
 
   final BookmarksRepository bookmarksRepository;
-  var _topStoriesCached = AsyncMemoizer<List<int>>();
+  var _cached = AsyncMemoizer<List<int>>();
 
   final Uri uri;
 
-  Future<List<int>> _fetchStoriesId() => _topStoriesCached.runOnce(() => http
+  Future<List<int>> _fetchStoriesId() => _cached.runOnce(() => http
       .get(uri)
       .then((value) {
         if (value.statusCode == 200) {
@@ -28,7 +28,7 @@ abstract class StoryRepository {
       .then(jsonDecode)
       .then((value) => List<int>.from(value)));
 
-  Future<Story> storyFetch(int id) => http
+  static Future<Story> storyFetch(int id) => http
       .get(Uri.parse('https://hacker-news.firebaseio.com/v0/item/$id.json'))
       .then((value) {
         if (value.statusCode == 200) {
@@ -54,7 +54,7 @@ abstract class StoryRepository {
   }
 
   Future<StoriesPagination> refetchStories() async {
-    _topStoriesCached = AsyncMemoizer<List<int>>();
+    _cached = AsyncMemoizer<List<int>>();
     return fetchStories();
   }
 

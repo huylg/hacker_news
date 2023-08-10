@@ -3,7 +3,7 @@ import 'package:hacker_news/comments/comment_item.dart';
 import 'package:hacker_news/models/comment.dart';
 import 'package:hacker_news/models/story.dart';
 import 'package:hacker_news/repositories/comments_repository.dart';
-import 'package:hacker_news/repositories/top_story_repository.dart';
+import 'package:hacker_news/repositories/story_repostitory.dart';
 import 'package:hacker_news/timeago.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -31,11 +31,10 @@ class _CommentsListViewState extends State<CommentsListView> {
 
   @override
   Widget build(BuildContext context) {
-    var commentsRepository = context.read<CommentsRepository>();
+    final commentsRepository = context.read<CommentsRepository>();
     return RefreshIndicator(
       onRefresh: () async {
-        final newStory =
-            await context.read<TopStoryRepository>().storyFetch(_story.id);
+        final newStory = await StoryRepository.storyFetch(_story.id);
         final newComments =
             await commentsRepository.commentsFetch(newStory.kids);
         setState(() {
@@ -45,29 +44,31 @@ class _CommentsListViewState extends State<CommentsListView> {
       },
       child: ListView.separated(
           itemCount: _comments.length + 1,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return ListTile(
-                isThreeLine: true,
-                titleTextStyle: Theme.of(context).textTheme.titleLarge,
-                onTap: () => launchUrlString(_story.url!),
-                title: Text(_story.title),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _story.time == null
-                        ? Text(_story.by)
-                        : Text(
-                            '${_story.by} - ${timeago(DateTime.fromMillisecondsSinceEpoch(widget.story.time! * 1000))}'),
-                    Text(
-                      '${_story.score} points | ${widget.story.descendants} comments',
+          itemBuilder: (context, index) => switch (index) {
+                0 => ListTile(
+                    isThreeLine: true,
+                    titleTextStyle: Theme.of(context).textTheme.titleLarge,
+                    onTap: () => launchUrlString(_story.url!),
+                    title: Text(_story.title),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _story.time == null
+                            ? Text(_story.by)
+                            : Text(
+                                '${_story.by} - ${timeago(DateTime.fromMillisecondsSinceEpoch(widget.story.time! * 1000))}'),
+                        Text(
+                            '${_story.score} points | ${widget.story.descendants} comments'),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: Text('Comments',
+                              style: Theme.of(context).textTheme.titleMedium),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            }
-            return CommentItem(_comments[index - 1]);
-          },
+                  ),
+                _ => CommentItem(_comments[index - 1]),
+              },
           separatorBuilder: (_, __) => const Divider()),
     );
   }
