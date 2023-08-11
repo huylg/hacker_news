@@ -1,13 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hacker_news/models/story.dart';
 import 'package:hacker_news/repositories/bookmarks_repository.dart';
+import 'package:hacker_news/repositories/html_metadata_repository.dart';
 import 'package:hacker_news/story/story_page.dart';
 import 'package:hacker_news/timeago.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class StoryItem extends StatelessWidget {
+class StoryItem extends StatefulWidget {
   const StoryItem({
     super.key,
     required this.story,
@@ -19,30 +21,50 @@ class StoryItem extends StatelessWidget {
   final ValueChanged<Story>? onChange;
 
   @override
+  State<StoryItem> createState() => _StoryItemState();
+}
+
+class _StoryItemState extends State<StoryItem> {
+  late final _future = context
+      .read<HtmlMetadataRepository>()
+      .getHtmlMetadata(widget.story.url ?? '');
+
+  @override
   Widget build(BuildContext context) => ListTile(
-        onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => StoryPage(story: story))),
-        title: Text(story.title),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => StoryPage(story: widget.story))),
+        title: FutureBuilder(
+          future: _future,
+          builder: (context, snapshot) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (snapshot.hasData)
+                CachedNetworkImage(
+                    imageUrl: snapshot.requireData, fit: BoxFit.fitWidth),
+              Text(widget.story.title),
+            ],
+          ),
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            story.time == null
-                ? Text(story.by)
+            widget.story.time == null
+                ? Text(widget.story.by)
                 : Text(
-                    '${story.by} - ${timeago(DateTime.fromMillisecondsSinceEpoch(story.time! * 1000))}'),
+                    '${widget.story.by} - ${timeago(DateTime.fromMillisecondsSinceEpoch(widget.story.time! * 1000))}'),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${story.score} points | ${story.descendants} comments',
+                  '${widget.story.score} points | ${widget.story.descendants} comments',
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
                       onPressed: () {
-                        final newStory =
-                            story.copyWith(isFavorite: !story.isFavorite);
+                        final newStory = widget.story
+                            .copyWith(isFavorite: !widget.story.isFavorite);
 
                         final repository = Provider.of<BookmarksRepository>(
                             context,
@@ -54,9 +76,9 @@ class StoryItem extends StatelessWidget {
                         }
                             .ignore();
 
-                        onChange?.call(newStory);
+                        widget.onChange?.call(newStory);
                       },
-                      icon: Icon(story.isFavorite
+                      icon: Icon(widget.story.isFavorite
                           ? Icons.bookmark
                           : Icons.bookmark_outline),
                     ),
@@ -71,11 +93,11 @@ class StoryItem extends StatelessWidget {
                                         TextButton(
                                             child: const Text('Share via'),
                                             onPressed: () => Share.share(
-                                                'https://news.ycombinator.com/item?id=${story.id}')),
+                                                'https://news.ycombinator.com/item?id=${widget.story.id}')),
                                         TextButton(
                                           child: const Text('Open HN link'),
                                           onPressed: () => launchUrlString(
-                                            'https://news.ycombinator.com/item?id=${story.id}',
+                                            'https://news.ycombinator.com/item?id=${widget.story.id}',
                                           ),
                                         ),
                                       ],

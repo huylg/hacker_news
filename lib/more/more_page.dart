@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hacker_news/brightness_change_notifier.dart';
 import 'package:hacker_news/main.dart';
+import 'package:hacker_news/material3_design_flag_change_notifer.dart';
 import 'package:hacker_news/my_bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -22,6 +23,15 @@ class MorePage extends StatelessWidget {
               .read<BrightnessChangeNotifier>()
               .brightness = value ? Brightness.dark : Brightness.light,
           title: const Text('Dark mode'),
+        ),
+        SwitchListTile(
+          value: context
+              .watch<Material3DesignFlagChangeNotifier>()
+              .material3DesignFlag,
+          onChanged: (value) => context
+              .read<Material3DesignFlagChangeNotifier>()
+              .material3DesignFlag = value,
+          title: const Text('Material 3'),
         ),
         const Divider(),
         const ListTile(
