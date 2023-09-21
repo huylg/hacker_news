@@ -47,7 +47,13 @@ class _CommentsListViewState extends State<CommentsListView> {
           itemBuilder: (context, index) => switch (index) {
                 0 => ListTile(
                     isThreeLine: true,
-                    titleTextStyle: Theme.of(context).textTheme.titleLarge,
+                    titleTextStyle: Theme.of(context)
+                        .listTileTheme
+                        .titleTextStyle
+                        ?.copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                     onTap: () => launchUrlString(_story.url!),
                     title: Text(_story.title),
                     subtitle: Column(
@@ -59,11 +65,6 @@ class _CommentsListViewState extends State<CommentsListView> {
                                 '${_story.by} - ${timeago(DateTime.fromMillisecondsSinceEpoch(widget.story.time! * 1000))}'),
                         Text(
                             '${_story.score} points | ${widget.story.descendants} comments'),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
-                          child: Text('Comments',
-                              style: Theme.of(context).textTheme.titleMedium),
-                        ),
                       ],
                     ),
                   ),

@@ -7,18 +7,19 @@ part of 'router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $storiesRoute,
+      $topStoriesRoute,
       $bookmarksRoute,
       $moreRoute,
     ];
 
-RouteBase get $storiesRoute => GoRouteData.$route(
+RouteBase get $topStoriesRoute => GoRouteData.$route(
       path: '/',
-      factory: $StoriesRouteExtension._fromState,
+      factory: $TopStoriesRouteExtension._fromState,
     );
 
-extension $StoriesRouteExtension on StoriesRoute {
-  static StoriesRoute _fromState(GoRouterState state) => const StoriesRoute();
+extension $TopStoriesRouteExtension on TopStoriesRoute {
+  static TopStoriesRoute _fromState(GoRouterState state) =>
+      const TopStoriesRoute();
 
   String get location => GoRouteData.$location(
         '/',

@@ -41,6 +41,7 @@ class _StoriesListViewState extends State<StoriesListView> {
         child: ListView.separated(
           itemCount: min(stories.length + 1, _data.total),
           separatorBuilder: (context, index) => const Divider(),
+          cacheExtent: 1000,
           itemBuilder: (context, index) {
             if (index == stories.length) {
               _loadmore ??= repository

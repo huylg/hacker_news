@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hacker_news/brightness_change_notifier.dart';
-import 'package:hacker_news/main.dart';
 import 'package:hacker_news/material3_design_flag_change_notifer.dart';
 import 'package:hacker_news/my_bottom_navigation_bar.dart';
 import 'package:provider/provider.dart';

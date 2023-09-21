@@ -15,7 +15,7 @@ class MyBottomNavigationbar extends StatelessWidget {
           _ => throw Exception('Unknown path'),
         },
         onTap: (value) => switch (value) {
-          0 => const StoriesRoute().go(context),
+          0 => const TopStoriesRoute().go(context),
           1 => const BookmarksRoute().go(context),
           2 => const MoreRoute().go(context),
           _ => throw Exception('Unknown index'),

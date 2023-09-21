@@ -1,9 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:async/async.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hacker_news/models/stories_pagination.dart';
 import 'package:hacker_news/models/story.dart';
 import 'package:hacker_news/repositories/bookmarks_repository.dart';
+import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 
 abstract class StoryRepository {
@@ -16,6 +21,16 @@ abstract class StoryRepository {
   var _cached = AsyncMemoizer<List<int>>();
 
   final Uri uri;
+
+  static Future<FileInfo> getPreviewImage(String url) => http
+      .get(Uri.parse(url))
+      .then((value) => value.body)
+      .then((value) => Isolate.run(() => parse(value)))
+      .then((value) => value.getElementsByTagName('meta'))
+      .then((value) => value.firstWhere(
+          (element) => element.attributes['property'] == 'og:image'))
+      .then((value) => value.attributes['content']!)
+      .then((value) => DefaultCacheManager().downloadFile(value));
 
   Future<List<int>> _fetchStoriesId() => _cached.runOnce(() => http
       .get(uri)
@@ -45,6 +60,13 @@ abstract class StoryRepository {
     final storiesId = await _fetchStoriesId();
     final stories = await Future.wait(
         storiesId.skip(current.offset * 30).take(30).map(storyFetch));
+    await stories
+        .map((e) => e.url)
+        .whereNotNull()
+        .map(getPreviewImage)
+        .wait
+        .onError<ParallelWaitError<List<FileInfo?>, List<AsyncError?>>>(
+            (error, stackTrace) => error.values.whereNotNull().toList());
 
     return (
       stories: [...current.stories, ...stories],
@@ -53,7 +75,7 @@ abstract class StoryRepository {
     );
   }
 
-  Future<StoriesPagination> refetchStories() async {
+  Future<StoriesPagination> refetchStories() {
     _cached = AsyncMemoizer<List<int>>();
     return fetchStories();
   }
@@ -71,6 +93,13 @@ abstract class StoryRepository {
         .then((value) =>
             value.map((e) => e.copyWith(isFavorite: bookmarks.contains(e.id))))
         .then((value) => value.toList());
+    await stories
+        .map((e) => e.url)
+        .whereNotNull()
+        .map(getPreviewImage)
+        .wait
+        .onError<ParallelWaitError<List<FileInfo?>, List<AsyncError?>>>(
+            (error, stackTrace) => error.values.whereNotNull().toList());
 
     return (
       stories: stories,
